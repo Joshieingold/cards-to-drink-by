@@ -1,0 +1,103 @@
+.nav-main {
+    background-color: black;
+    width: 100vw;
+    position: fixed;
+    top: 0px;
+    display: flex;
+    color: white;
+}
+
+.title-container {
+    margin-left: 20px;
+}
+
+.bubble {
+    flex: 1 1 200px;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: 40vh;
+    min-height: 40vh;
+
+}
+
+.bubble-container {
+    display: flex;
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+}
+.player-list {
+    text-align: left;
+}
+
+.bubble-header {
+    color: white;
+    background: black;
+    top: 0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.home-container {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.add-card-button {
+    margin-top: 10%;
+    width: 10%;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.bubble-content {
+    margin: 10px;
+    height: 90%;
+    flex-direction: column;
+    overflow-y: auto;
+    display: flex;
+    flex: 1;
+}
+.submit-button {
+    width: 25%;
+}
+.username-box {
+    width: 50%;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid black;
+    text-align: center;
+    background-color: white;
+    color: black;
+}
+@media screen and (max-width: 768px ) {
+.home-container {height:100vh}
+    .bubble-container {
+        flex-direction: column;
+        width: 90%;
+    }
+    .bubble {
+        width: 100%;
+    }
+    .add-card-button {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
+        border-radius: 200rem;
+        text-align: center;
+    }
+}
