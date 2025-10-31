@@ -35,11 +35,15 @@ function BroadcastPlayers() {
 function BroadcastGameStateUpdate(updateTo) {
     switch (updateTo) {
         case "countdown":
+            wss.clients.forEach(client => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({ type: "gameState", state: updateTo}));
+                }
+            })
             break;
         case "reveal-card":
             break;
         case "send-player-choice":
             break;
     }
-
 }

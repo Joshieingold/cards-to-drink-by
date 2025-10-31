@@ -10,6 +10,7 @@ import {collection, addDoc} from "firebase/firestore";
 function App() {
   const [players, setPlayers] = useState([]); 
   const [newCardActive, setNewCardActive] = useState(false);
+  const [gameState, setGameState] = useState();
   const wsRef = useRef(null);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ function App() {
 
   return (
     <div className="home-container">
-      <Navbar />
+      <Navbar setGameState={setGameState}/>
       <div className="bubble-container">
         <JoinBubble onJoin={handleAddPlayer} />
         <LobbyBubble players={players} />
@@ -49,6 +50,11 @@ function App() {
         </span>
       </button>
       {newCardActive ? <AddCardForm setNewCardActive={setNewCardActive}/> : <div></div>}
+      {gameState === "countdown" ? (
+       <Countdown onFinish={() => setGameState("lobby")}/> 
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }
@@ -64,6 +70,26 @@ function AddCardForm({ setNewCardActive }) {
   const HandleSubmit = async (e) => {
     e.preventDefault();
     if (text.trim() === "") return;
+function Countdown({onFinish}) {
+  const [count, setCount] = useState(5);
+  useEffect(() => {
+    if (count > 0) {
+      const timer = setTimeout(() => setCount(count - 1), 1000);
+      return () => clearTimeout(timer); 
+    } 
+    else {
+      const finishTimer = setTimeout(() => onFinish?.(), 1000);
+      return () => clearTimeout(finishTimer);
+    }
+  }, [count, onFinish]);
+  return (
+    <div className="countdown-container">
+      <h1 className="countdown-text">
+        {count > 0 ? count : "Loading.."}
+      </h1>
+    </div>
+  )
+}
 
     await addCard("GET USERNAME", text);
     setText("");
@@ -133,8 +159,6 @@ function JoinBubble({ onJoin }) {
   );
 }
 
-
-
 function LobbyBubble({ players }) {
   return (
     <div className="bubble">
@@ -152,15 +176,14 @@ function LobbyBubble({ players }) {
   );
 }
 
-
-function Navbar() {
+function Navbar({setGameState}) {
   return (
     <div className="nav-main">
       <div className="title-container">
         <h2>Cards to Drink By</h2>
       </div>
       <div className="host-button-container">
-        <button className="spectate-view">
+        <button className="spectate-view" onClick={() => setGameState("countdown")}>
           <span className="btn-text">Spectate</span>
           <span className="btn-icon"><img className="icon" src={glassesIcon}/></span>
         </button>
