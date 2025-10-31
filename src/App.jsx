@@ -19,7 +19,6 @@ function App() {
         <JoinBubble onJoin={handleAddPlayer} />
         <LobbyBubble players={players} />
       </div>
-      
       <button className="add-card-button">Add Card</button>
     </div>
   );
@@ -94,6 +93,9 @@ function Navbar() {
     <div className="nav-main">
       <div className="title-container">
         <h2>Cards to Drink By</h2>
+      </div>
+      <div className="host-button-container">
+        <button className="spectate-view">Spectate</button>
       </div>
     </div>
   );
