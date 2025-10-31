@@ -1,6 +1,8 @@
 import "./App.css";
 import "./css/home.css";
 import React, { useState, useEffect, useRef } from "react";
+import glassesIcon from "./assets/glasses.png";
+import cardIcon from "./assets/cards.png";
 
 function App() {
   const [players, setPlayers] = useState([]); 
@@ -35,7 +37,10 @@ function App() {
         <JoinBubble onJoin={handleAddPlayer} />
         <LobbyBubble players={players} />
       </div>
-      <button className="add-card-button">Add Card</button>
+      <button className="add-card-button">
+        <span className="btn-text">Add Card</span>
+        <span className="btn-icon"><img src={cardIcon}></img></span>
+      </button>
     </div>
   );
 }
