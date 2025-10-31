@@ -6,6 +6,7 @@ import cardIcon from "./assets/cards.png";
 
 function App() {
   const [players, setPlayers] = useState([]); 
+  const [gameState, setGameState] = useState();
   const wsRef = useRef(null);
 
   useEffect(() => {
@@ -29,18 +30,26 @@ function App() {
       wsRef.current.send(JSON.stringify({ type: "join", name}));
     }
   };
+  
 
   return (
     <div className="home-container">
-      <Navbar />
+      <Navbar setGameState={setGameState}/>
       <div className="bubble-container">
         <JoinBubble onJoin={handleAddPlayer} />
         <LobbyBubble players={players} />
       </div>
       <button className="add-card-button">
         <span className="btn-text">Add Card</span>
-        <span className="btn-icon"><img src={cardIcon}></img></span>
+        <span className="btn-icon">
+          <img src={cardIcon}></img>
+        </span>
       </button>
+      {gameState === "countdown" ? (
+        <div>countdown ON</div>
+      ) : (
+        <div>countdown OFF</div>
+      )}
     </div>
   );
 }
@@ -88,8 +97,6 @@ function JoinBubble({ onJoin }) {
   );
 }
 
-
-
 function LobbyBubble({ players }) {
   return (
     <div className="bubble">
@@ -107,15 +114,14 @@ function LobbyBubble({ players }) {
   );
 }
 
-
-function Navbar() {
+function Navbar({setGameState}) {
   return (
     <div className="nav-main">
       <div className="title-container">
         <h2>Cards to Drink By</h2>
       </div>
       <div className="host-button-container">
-        <button className="spectate-view">
+        <button className="spectate-view" onClick={() => setGameState("countdown")}>
           <span className="btn-text">Spectate</span>
           <span className="btn-icon"><img className="icon" src={glassesIcon}/></span>
         </button>
