@@ -5,7 +5,7 @@ import glassesIcon from "./assets/glasses.png";
 import cardIcon from "./assets/cards.png";
 
 function App() {
-  const [players, setPlayers] = useState([]); // shared player list
+  const [players, setPlayers] = useState([]); 
 
   // function to add a player
   const handleAddPlayer = (name) => {
@@ -37,13 +37,13 @@ export default App;
 
 function JoinBubble({ onJoin }) {
   const [name, setName] = useState("");
-  const [joined, setJoined] = useState(false); // Track if the user has joined
+  const [joined, setJoined] = useState(false); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.trim() === "") return;
     onJoin(name);
-    setJoined(true); // Switch to "Welcome" view
+    setJoined(true); 
   };
 
   return (
