@@ -30,7 +30,6 @@ function App() {
       wsRef.current.send(JSON.stringify({ type: "join", name}));
     }
   };
-  
 
   return (
     <div className="home-container">
@@ -46,9 +45,9 @@ function App() {
         </span>
       </button>
       {gameState === "countdown" ? (
-        <div>countdown ON</div>
+       <Countdown onFinish={() => setGameState("lobby")}/> 
       ) : (
-        <div>countdown OFF</div>
+        <div></div>
       )}
     </div>
   );
@@ -56,6 +55,26 @@ function App() {
 export default App;
 
 
+function Countdown({onFinish}) {
+  const [count, setCount] = useState(5);
+  useEffect(() => {
+    if (count > 0) {
+      const timer = setTimeout(() => setCount(count - 1), 1000);
+      return () => clearTimeout(timer); 
+    } 
+    else {
+      const finishTimer = setTimeout(() => onFinish?.(), 1000);
+      return () => clearTimeout(finishTimer);
+    }
+  }, [count, onFinish]);
+  return (
+    <div className="countdown-container">
+      <h1 className="countdown-text">
+        {count > 0 ? count : "Loading.."}
+      </h1>
+    </div>
+  )
+}
 
 function JoinBubble({ onJoin }) {
   const [name, setName] = useState("");
