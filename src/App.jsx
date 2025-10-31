@@ -21,6 +21,7 @@ function App() {
     return () => ws.close();
   }, []);
 
+
   const handleAddPlayer = (name) => {
     if (name.trim() !== "") {
       wsRef.current.send(JSON.stringify({ type: "join", name}));
@@ -50,7 +51,7 @@ function JoinBubble({ onJoin }) {
     e.preventDefault();
     if (name.trim() === "") return;
     onJoin(name);
-    setJoined(true); // Switch to "Welcome" view
+    setJoined(true); 
   };
 
   return (
@@ -107,6 +108,12 @@ function Navbar() {
     <div className="nav-main">
       <div className="title-container">
         <h2>Cards to Drink By</h2>
+      </div>
+      <div className="host-button-container">
+        <button className="spectate-view">
+          <span className="btn-text">Spectate</span>
+          <span className="btn-icon"><img className="icon" src={glassesIcon}/></span>
+        </button>
       </div>
     </div>
   );
