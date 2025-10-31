@@ -1,6 +1,7 @@
 import "./App.css";
 import "./css/home.css";
 import React, { useState } from "react";
+import glassesIcon from "./assets/glasses.png";
 
 function App() {
   const [players, setPlayers] = useState([]); // shared player list
@@ -95,7 +96,10 @@ function Navbar() {
         <h2>Cards to Drink By</h2>
       </div>
       <div className="host-button-container">
-        <button className="spectate-view">Spectate</button>
+        <button className="spectate-view">
+          <span className="btn-text">Spectate</span>
+          <span className="btn-icon"><img className="icon" src={glassesIcon}/></span>
+        </button>
       </div>
     </div>
   );
