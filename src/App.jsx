@@ -1,16 +1,29 @@
 import "./App.css";
 import "./css/home.css";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 function App() {
-  const ws = new WebSocket("ws://192.168.2.64:8082");
-  ws.addEventListener("open", () => {
-    console.log("Connected!");
-  })
   const [players, setPlayers] = useState([]); 
+  const wsRef = useRef(null);
+
+  useEffect(() => {
+  const ws = new WebSocket("ws://192.168.2.64:8082");
+  wsRef.current = ws;
+    ws.onopen = () => console.log("Connected!");
+
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+      if (msg.type === "updatePlayers") {
+        setPlayers(msg.players);
+      }
+    };
+    ws.onclose = () => console.log("Disconnected from the server");
+    return () => ws.close();
+  }, []);
+
   const handleAddPlayer = (name) => {
     if (name.trim() !== "") {
-      setPlayers((prev) => [...prev, name]);
+      wsRef.current.send(JSON.stringify({ type: "join", name}));
     }
   };
 
