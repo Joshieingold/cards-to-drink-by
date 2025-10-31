@@ -12,6 +12,11 @@ wss.on("connection", ws => {
             BroadcastPlayers();
         }
     })
+    ws.on("countdown", () => {
+        BroadcastGameStateUpdate("countdown");
+
+    })
+
     ws.on("close", () => {
         players = players.filter(p => p.ws !== ws);
         BroadcastPlayers();
@@ -26,4 +31,15 @@ function BroadcastPlayers() {
             client.send(message);
         }
     })
+}
+function BroadcastGameStateUpdate(updateTo) {
+    switch (updateTo) {
+        case "countdown":
+            break;
+        case "reveal-card":
+            break;
+        case "send-player-choice":
+            break;
+    }
+
 }
