@@ -3,9 +3,11 @@ import "./css/home.css";
 import React, { useState } from "react";
 
 function App() {
-  const [players, setPlayers] = useState([]); // shared player list
-
-  // function to add a player
+  const ws = new WebSocket("ws://192.168.2.64:8082");
+  ws.addEventListener("open", () => {
+    console.log("Connected!");
+  })
+  const [players, setPlayers] = useState([]); 
   const handleAddPlayer = (name) => {
     if (name.trim() !== "") {
       setPlayers((prev) => [...prev, name]);
@@ -19,19 +21,17 @@ function App() {
         <JoinBubble onJoin={handleAddPlayer} />
         <LobbyBubble players={players} />
       </div>
-      
       <button className="add-card-button">Add Card</button>
     </div>
   );
 }
-
 export default App;
 
 
 
 function JoinBubble({ onJoin }) {
   const [name, setName] = useState("");
-  const [joined, setJoined] = useState(false); // Track if the user has joined
+  const [joined, setJoined] = useState(false); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
