@@ -1,16 +1,30 @@
 import "./App.css";
 import "./css/home.css";
-import React, { useState } from "react";
-import glassesIcon from "./assets/glasses.png";
-import cardIcon from "./assets/cards.png";
+import React, { useState, useEffect, useRef } from "react";
 
 function App() {
   const [players, setPlayers] = useState([]); 
+  const wsRef = useRef(null);
 
-  // function to add a player
+  useEffect(() => {
+  const ws = new WebSocket("ws://192.168.2.64:8082");
+  wsRef.current = ws;
+    ws.onopen = () => console.log("Connected!");
+
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+      if (msg.type === "updatePlayers") {
+        setPlayers(msg.players);
+      }
+    };
+    ws.onclose = () => console.log("Disconnected from the server");
+    return () => ws.close();
+  }, []);
+
+
   const handleAddPlayer = (name) => {
     if (name.trim() !== "") {
-      setPlayers((prev) => [...prev, name]);
+      wsRef.current.send(JSON.stringify({ type: "join", name}));
     }
   };
 
@@ -21,16 +35,10 @@ function App() {
         <JoinBubble onJoin={handleAddPlayer} />
         <LobbyBubble players={players} />
       </div>
-      <button className="add-card-button">
-        <span className="btn-text">Add Card</span>
-        <span className="btn-icon">
-          <img src={cardIcon} className="icon"></img>
-        </span>
-        </button>
+      <button className="add-card-button">Add Card</button>
     </div>
   );
 }
-
 export default App;
 
 
