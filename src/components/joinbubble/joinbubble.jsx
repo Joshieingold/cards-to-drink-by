@@ -1,14 +1,14 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 
 function JoinBubble({ onJoin }) {
   const [name, setName] = useState("");
-  const [joined, setJoined] = useState(false); 
+  const [joined, setJoined] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.trim() === "") return;
     onJoin(name);
-    setJoined(true); 
+    setJoined(true);
   };
 
   return (
@@ -30,7 +30,9 @@ function JoinBubble({ onJoin }) {
               Join
             </button>
           </form>
-        ) : (
+        ) 
+        :
+        (
           <div className="welcome-message">
             <h3>Welcome {name}!</h3>
           </div>

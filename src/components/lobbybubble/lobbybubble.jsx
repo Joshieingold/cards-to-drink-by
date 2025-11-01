@@ -6,9 +6,7 @@ function LobbyBubble({ players }) {
       </div>
       <div className="bubble-content">
         <ol className="player-list">
-          {players.map((player, index) => (
-            <li key={index}>{player}</li>
-          ))}
+          {players.map((player, index) => ( <li key={index}>{player}</li>))}
         </ol>
       </div>
     </div>
