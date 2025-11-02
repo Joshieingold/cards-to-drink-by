@@ -1,0 +1,19 @@
+.btn-text {
+    display: flex;
+}
+
+.btn-icon {
+    display: none;
+}
+
+.home-container {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.add-card-button {
+    margin-top: 10%;
+}

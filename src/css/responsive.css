@@ -1,0 +1,44 @@
+@media screen and (max-width: 768px ) {
+.home-container {height:100vh}
+    .bubble-container {
+        flex-direction: column;
+        width: 90%;
+        margin-top: 70px;
+    }
+    .bubble {
+        width: 100%;
+    }
+    .add-card-button {
+        position: fixed;
+        width: 70px;
+        height: 70px;
+        bottom: 20px;
+        right: 20px;
+        border-radius: 200rem;
+        text-align: center;
+    }
+    .title-container {
+        width: 75%;
+        margin-left: 0;
+    }
+    .nav-main {
+        justify-content: center;
+    }
+    
+    .spectate-view {
+        width: 20px;
+        display: flex;
+        text-align: center;
+        align-items: center;
+    }
+    .btn-text {
+        display: none;
+
+    }
+    .btn-icon {
+        display: flex;
+        width: 24px;
+        height: 24px;
+
+    }
+}
