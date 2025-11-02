@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./countdown.css";
 
 function Countdown({ onFinish }) {
   const [count, setCount] = useState(5);

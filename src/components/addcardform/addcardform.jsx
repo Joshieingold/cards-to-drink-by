@@ -1,6 +1,7 @@
 import { db } from "../../firebase/firebase.jsx";
 import { collection, addDoc } from "firebase/firestore";
 import React, { useState } from "react";
+import "./addcardform.css";
 
 async function addCard(username, text) {
   await addDoc(collection(db, "cards"), {

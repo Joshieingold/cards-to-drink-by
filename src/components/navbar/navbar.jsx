@@ -1,4 +1,5 @@
 import glassesIcon from "../../assets/glasses.png";
+import "./navbar.css";
 
 function Navbar({ setGameState }) {
   return (

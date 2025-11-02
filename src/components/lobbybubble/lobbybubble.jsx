@@ -1,3 +1,4 @@
+import "./lobbybubble.css";
 function LobbyBubble({ players }) {
   return (
     <div className="bubble">
@@ -12,4 +13,5 @@ function LobbyBubble({ players }) {
     </div>
   );
 }
+
 export default LobbyBubble;

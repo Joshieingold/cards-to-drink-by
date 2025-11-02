@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./joinbubble.css";
 
 function JoinBubble({ onJoin }) {
   const [name, setName] = useState("");

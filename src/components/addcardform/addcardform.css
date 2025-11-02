@@ -1,0 +1,59 @@
+.card-form-popup {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    background-color: whitesmoke;
+    height: 80vh;
+    top: 5vh;
+    width: 90vw;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.card-title-container {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.close-button {
+    background-color: black;
+    height: 70%;
+}
+
+.card-text-container {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.card-creation-form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.question-area {
+    display: flex;
+    background-color: whitesmoke;
+    color: black;
+    border: none;
+    text-align: top;
+    height: 80%;
+    font-size: 24px;
+}
+
+.submit-card-button {
+    background-color: black;
+    color: white;
+}

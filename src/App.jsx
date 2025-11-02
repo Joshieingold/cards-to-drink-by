@@ -1,5 +1,7 @@
 import "./App.css";
-import "./css/home.css";
+import "./css/styles.css";
+import "./css/bubble.css";
+import "./css/responsive.css";
 import React, { useState, useEffect, useRef } from "react";
 
 import cardIcon from "./assets/cards.png";
