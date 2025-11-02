@@ -11,12 +11,11 @@ wss.on("connection", ws => {
             players.push({name: msg.name, ws});
             BroadcastPlayers();
         }
+        if (msg.type === "update") {
+            console.log(msg.state);
+            BroadcastGameStateUpdate(msg.state);
+        }
     })
-    ws.on("countdown", () => {
-        BroadcastGameStateUpdate("countdown");
-
-    })
-
     ws.on("close", () => {
         players = players.filter(p => p.ws !== ws);
         BroadcastPlayers();
@@ -37,7 +36,7 @@ function BroadcastGameStateUpdate(updateTo) {
         case "countdown":
             wss.clients.forEach(client => {
                 if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({ type: "gameState", state: updateTo}));
+                    client.send(JSON.stringify({ type: "globalCountdown", state: "globalCountdown"}));
                 }
             })
             break;

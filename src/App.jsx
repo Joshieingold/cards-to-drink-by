@@ -28,6 +28,9 @@ function App() {
       if (msg.type === "updatePlayers") {
         setPlayers(msg.players);
       }
+      if (msg.type === "globalCountdown") {
+        setGameState("countdown");
+      }
     };
     ws.onclose = () => console.log("Disconnected from the server");
     return () => ws.close();
@@ -37,7 +40,11 @@ function App() {
     if (name.trim() !== "") {
       wsRef.current.send(JSON.stringify({ type: "join", name }));
     }
+
   };
+ const handlePingGamestate = (gameState) => {
+    wsRef.current.send(JSON.stringify({ type: "update", state: gameState}));
+  } 
 
   return (
     <div className="home-container">
@@ -52,6 +59,7 @@ function App() {
           <img src={cardIcon}></img>
         </span>
       </button>
+      <button onClick={() => handlePingGamestate("countdown")}>Change ALL GAME STATE</button>
       {newCardActive ? ( <AddCardForm setNewCardActive={setNewCardActive} />) : ( <div></div>)}
       {gameState === "countdown" ? ( <Countdown onFinish={() => setGameState("lobby")} />) : ( <div></div>)}
     </div>
