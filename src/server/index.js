@@ -12,7 +12,6 @@ wss.on("connection", ws => {
             BroadcastPlayers();
         }
         if (msg.type === "update") {
-            console.log(msg.state);
             BroadcastGameStateUpdate(msg.state);
         }
     })
