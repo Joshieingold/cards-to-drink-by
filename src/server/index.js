@@ -2,19 +2,27 @@ import WebSocket, { WebSocketServer } from "ws";
 
 const wss = new WebSocketServer({ port: 8082});
 let players = [];
+let gameState = "lobby"; 
 
 wss.on("connection", ws => {
     console.log("New Client has connected!")
+    BroadcastGameStateUpdate(gameState);
+
     ws.on("message", (data) => {
         const msg = JSON.parse(data);
         if (msg.type === "join") {
             players.push({name: msg.name, ws});
             BroadcastPlayers();
         }
-        if (msg.type === "update") {
-            BroadcastGameStateUpdate(msg.state);
+        if (msg.type === "requestGameState") {
+            BroadcastGameStateUpdate(gameState);
+        }
+        if (msg.type === "changeGameState") {
+            gameState = msg.state;
+            BroadcastGameStateUpdate(gameState);
         }
     })
+
     ws.on("close", () => {
         players = players.filter(p => p.ws !== ws);
         BroadcastPlayers();
@@ -31,17 +39,9 @@ function BroadcastPlayers() {
     })
 }
 function BroadcastGameStateUpdate(updateTo) {
-    switch (updateTo) {
-        case "countdown":
-            wss.clients.forEach(client => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({ type: "globalCountdown", state: "globalCountdown"}));
-                }
-            })
-            break;
-        case "reveal-card":
-            break;
-        case "send-player-choice":
-            break;
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({ type: "gameState", state: updateTo }));
     }
+  });
 }

@@ -4,8 +4,7 @@ import "./css/bubble.css";
 import "./css/responsive.css";
 import React, { useState, useEffect, useRef } from "react";
 
-import cardIcon from "./assets/cards.png";
-
+import QR from "./assets/qr-code.png";
 import Navbar from "./components/navbar/navbar.jsx";
 import JoinBubble from "./components/joinbubble/joinbubble.jsx";
 import AddCardForm from "./components/addcardform/addcardform.jsx";
@@ -14,8 +13,8 @@ import LobbyBubble from "./components/lobbybubble/lobbybubble.jsx";
 
 function App() {
   const [players, setPlayers] = useState([]);
-  const [newCardActive, setNewCardActive] = useState(false);
-  const [gameState, setGameState] = useState();
+  const [localGameState, setLocalGameState] = useState("lobby");
+  const [isHost, setIsHost] = useState(false);
   const wsRef = useRef(null);
 
   useEffect(() => {
@@ -28,10 +27,13 @@ function App() {
       if (msg.type === "updatePlayers") {
         setPlayers(msg.players);
       }
-      if (msg.type === "globalCountdown") {
-        setGameState("countdown");
+      if (msg.type === "gameState") {
+        if (isHost === false) {
+          setLocalGameState(msg.state);
+        }
       }
     };
+
     ws.onclose = () => console.log("Disconnected from the server");
     return () => ws.close();
   }, []);
@@ -40,28 +42,64 @@ function App() {
     if (name.trim() !== "") {
       wsRef.current.send(JSON.stringify({ type: "join", name }));
     }
-
   };
- const handlePingGamestate = (gameState) => {
-    wsRef.current.send(JSON.stringify({ type: "update", state: gameState}));
-  } 
+  const handleBecomeHost = () => {
+    setLocalGameState("host");
+    setIsHost(true);
+  };
+  const handleStopHost = () => {
+    setIsHost(false);
+  }
+  const AskCurrentGameState = () => {
+    wsRef.current.send(JSON.stringify({ type: "requestGameState"}));
+  }
+  const RequestGameStateChange = (newState) => {
+    wsRef.current.send(JSON.stringify({ type: "changeGameState", state: newState}));
+  };
+  const GeneratePage = (gameState) => {
+    switch (gameState) {
+      case "lobby":
+        return (
+          <div className="bubble-container">
+            <JoinBubble onJoin={handleAddPlayer} />
+            <LobbyBubble players={players} />
+          </div>
+        );
+      case "countdown":
+        return (
+          <div className="bubble-container">
+            <JoinBubble onJoin={handleAddPlayer} />
+            <LobbyBubble players={players} />
+            <Countdown onFinish={RequestGameStateChange("game")} />
+          </div>
+        );
+      case "host":
+        return (
+          <div className="bubble-container">
+            <h2>You are the Host</h2>
+            <LobbyBubble players={players} />
+            <button onClick={() => handleStopHost()}>Back to Lobby</button>
+            <button onClick={() => RequestGameStateChange("lobby")}>Restart Game</button>
+            <button onClick={() => RequestGameStateChange("countdown")}>
+              Start Countdown
+            </button>
+          </div>
+        );
+      case "game":
+        return (
+          <div className="bubble-container">
+            <h2>Game in Progress</h2>
+            <LobbyBubble players={players} />
+          </div>
+        );
+    }
+  };
 
   return (
     <div className="home-container">
-      <Navbar setGameState={setGameState} />
-      <div className="bubble-container">
-        <JoinBubble onJoin={handleAddPlayer} />
-        <LobbyBubble players={players} />
-      </div>
-      <button className="add-card-button" onClick={() => setNewCardActive(true)}>
-        <span className="btn-text">Add Card</span>
-        <span className="btn-icon">
-          <img src={cardIcon}></img>
-        </span>
-      </button>
-      <button onClick={() => handlePingGamestate("countdown")}>Change ALL GAME STATE</button>
-      {newCardActive ? ( <AddCardForm setNewCardActive={setNewCardActive} />) : ( <div></div>)}
-      {gameState === "countdown" ? ( <Countdown onFinish={() => setGameState("lobby")} />) : ( <div></div>)}
+      <Navbar/>
+      {GeneratePage(localGameState)}
+      <button onClick={() => handleBecomeHost()}>Become Host</button>
     </div>
   );
 }
