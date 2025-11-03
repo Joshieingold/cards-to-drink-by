@@ -15,8 +15,14 @@ function App() {
   const [players, setPlayers] = useState([]);
   const [localGameState, setLocalGameState] = useState("lobby");
   const [isHost, setIsHost] = useState(false);
-  const [currentCardData, setCurrentCardData] = useState()
+  const [currentCardData, setCurrentCardData] = useState("")
+  const [userID, setUserID] = useState("");
   const wsRef = useRef(null);
+  useEffect(() => {
+    if (userID) {
+      console.log("User ID set to:", userID);
+    }
+  }, [userID]);
   useEffect(() => {
     const ws = new WebSocket("ws://192.168.2.64:8082");
     wsRef.current = ws;
@@ -46,6 +52,7 @@ function App() {
   const handleAddPlayer = (name) => {
     if (name.trim() !== "") {
       wsRef.current.send(JSON.stringify({ type: "join", name }));
+      setUserID(name);
     }
   };
   const handleBecomeHost = () => {
@@ -117,7 +124,11 @@ function App() {
           <div>
             <h2>{currentCardData ? currentCardData.player : ""}</h2>
             <h2>{currentCardData ? currentCardData.card.Text : ""}</h2>
-
+            {(currentCardData.player === userID) ? 
+            <div className="ChoiceButton">
+              <button>Drink</button>
+              <button>Answer</button>
+            </div> : <div></div>}
           </div>
         ) 
     }
