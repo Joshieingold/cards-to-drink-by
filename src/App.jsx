@@ -2,6 +2,7 @@ import "./App.css";
 import "./css/styles.css";
 import "./css/bubble.css";
 import "./css/responsive.css";
+
 import React, { useState, useEffect, useRef } from "react";
 
 import QR from "./assets/qr-code.png";
@@ -15,68 +16,88 @@ function App() {
   const [players, setPlayers] = useState([]);
   const [localGameState, setLocalGameState] = useState("lobby");
   const [isHost, setIsHost] = useState(false);
-  const [currentCardData, setCurrentCardData] = useState("")
+  const [currentCardData, setCurrentCardData] = useState("");
   const [userID, setUserID] = useState("");
   const wsRef = useRef(null);
+
+  // Logs the userID
   useEffect(() => {
     if (userID) {
       console.log("User ID set to:", userID);
     }
   }, [userID]);
+
+  // WebSocket Message Recieving
   useEffect(() => {
     const ws = new WebSocket("ws://192.168.2.64:8082");
     wsRef.current = ws;
-    ws.onopen = () => console.log("Connected!");
 
+    ws.onopen = () => console.log("Connected!");
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);
       if (msg.type === "updatePlayers") {
+        // Player list update recieved
         setPlayers(msg.players);
       }
       if (msg.type === "gameState") {
+        // Game state update recieved
         if (isHost === false) {
-          console.log(isHost);
+          // Hosts arent affected
           setLocalGameState(msg.state);
         }
       }
       if (msg.type === "card") {
-        console.log("card for " + msg.player + ": " + JSON.stringify(msg.card));
-        setCurrentCardData(msg); 
+        // New card recieved
+        setCurrentCardData(msg);
       }
     };
-
     ws.onclose = () => console.log("Disconnected from the server");
     return () => ws.close();
   }, []);
 
+  // Local Handlers //
+
+  // Tells the server the new player who joined
   const handleAddPlayer = (name) => {
     if (name.trim() !== "") {
       wsRef.current.send(JSON.stringify({ type: "join", name }));
-      setUserID(name);
+      setUserID(name); // sets the local userID
     }
   };
+
+  // Makes this client a host
   const handleBecomeHost = () => {
     setLocalGameState("host");
-    RequestCard();
+    RequestCard(); // DEBUG TO GET NEW CARD TO PREVENT NULL
     setIsHost(true);
   };
+
+  // Makes this client a normal user again
   const handleStopHost = () => {
     setIsHost(false);
-    AskCurrentGameState();
+    AskCurrentGameState(); // Syncs up with the other players Game State
   };
+
+  // SERVER REQUESTERS //
+
+  // Requests the servers Game State to be sent to all clients
   const AskCurrentGameState = () => {
     wsRef.current.send(JSON.stringify({ type: "requestGameState" }));
   };
+
+  // Requests for the server to change the Game State
   const RequestGameStateChange = (newState) => {
     wsRef.current.send(
       JSON.stringify({ type: "changeGameState", state: newState })
     );
   };
+
+  // Requests the server to send all clients a card
   const RequestCard = () => {
-    wsRef.current.send(
-      JSON.stringify({type: "requestCard"})
-    )
+    wsRef.current.send(JSON.stringify({ type: "requestCard" }));
   };
+
+  // Changes the page content based on the local game state passed into it
   const GeneratePage = (gameState) => {
     switch (gameState) {
       case "lobby":
@@ -119,18 +140,27 @@ function App() {
           </div>
         );
       case "game":
-        
         return (
-          <div>
-            <h2>{currentCardData ? currentCardData.player : ""}</h2>
-            <h2>{currentCardData ? currentCardData.card.Text : ""}</h2>
-            {(currentCardData.player === userID) ? 
-            <div className="ChoiceButton">
-              <button>Drink</button>
-              <button>Answer</button>
-            </div> : <div></div>}
+          <div className="card-form-container">
+            <div className="card-title-container">
+              <h2>Question For: {currentCardData ? currentCardData.player : ""}</h2>
+            </div>
+            <div className="question-area">
+              <h2 className="question-area">{currentCardData ? currentCardData.card.Text : ""}</h2>
+            </div>
+            <div className="choice-button-container">
+            {currentCardData.player === userID ? (
+              <div className="choice-buttons">
+                <button className="choice-button">Drink</button>
+                <button className="choice-button">Answer</button>
+              </div>
+            ) : (
+              <div></div>
+            )}
+            </div>
+
           </div>
-        ) 
+        );
     }
   };
 
