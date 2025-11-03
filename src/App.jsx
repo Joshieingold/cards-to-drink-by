@@ -143,7 +143,7 @@ function App() {
         return (
           <div className="card-form-container">
             <div className="card-title-container">
-              <h2>Question For: {currentCardData ? currentCardData.player : ""}</h2>
+              <h2>Question For {currentCardData ? currentCardData.player : ""}!</h2>
             </div>
             <div className="question-area">
               <h2 className="question-area">{currentCardData ? currentCardData.card.Text : ""}</h2>
