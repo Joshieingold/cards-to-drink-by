@@ -15,8 +15,8 @@ function App() {
   const [players, setPlayers] = useState([]);
   const [localGameState, setLocalGameState] = useState("lobby");
   const [isHost, setIsHost] = useState(false);
+  const [currentCardData, setCurrentCardData] = useState()
   const wsRef = useRef(null);
-
   useEffect(() => {
     const ws = new WebSocket("ws://192.168.2.64:8082");
     wsRef.current = ws;
@@ -29,8 +29,13 @@ function App() {
       }
       if (msg.type === "gameState") {
         if (isHost === false) {
+          console.log(isHost);
           setLocalGameState(msg.state);
         }
+      }
+      if (msg.type === "card") {
+        console.log("card for " + msg.player + ": " + JSON.stringify(msg.card));
+        setCurrentCardData(msg); 
       }
     };
 
@@ -45,16 +50,25 @@ function App() {
   };
   const handleBecomeHost = () => {
     setLocalGameState("host");
+    RequestCard();
     setIsHost(true);
   };
   const handleStopHost = () => {
     setIsHost(false);
-  }
+    AskCurrentGameState();
+  };
   const AskCurrentGameState = () => {
-    wsRef.current.send(JSON.stringify({ type: "requestGameState"}));
-  }
+    wsRef.current.send(JSON.stringify({ type: "requestGameState" }));
+  };
   const RequestGameStateChange = (newState) => {
-    wsRef.current.send(JSON.stringify({ type: "changeGameState", state: newState}));
+    wsRef.current.send(
+      JSON.stringify({ type: "changeGameState", state: newState })
+    );
+  };
+  const RequestCard = () => {
+    wsRef.current.send(
+      JSON.stringify({type: "requestCard"})
+    )
   };
   const GeneratePage = (gameState) => {
     switch (gameState) {
@@ -76,28 +90,42 @@ function App() {
       case "host":
         return (
           <div className="bubble-container">
-            <h2>You are the Host</h2>
+            <div className="bubble">
+              <div className="bubble-header">
+                <h3>Join Here!</h3>
+              </div>
+              <div className="bubble-content">
+                <img src={QR} className="qr-code"></img>
+              </div>
+            </div>
             <LobbyBubble players={players} />
-            <button onClick={() => handleStopHost()}>Back to Lobby</button>
-            <button onClick={() => RequestGameStateChange("lobby")}>Restart Game</button>
-            <button onClick={() => RequestGameStateChange("countdown")}>
-              Start Countdown
-            </button>
+            <div className="control-panel">
+              <button onClick={() => handleStopHost()}>Back to Lobby</button>
+              <button onClick={() => RequestGameStateChange("lobby")}>
+                Restart Game
+              </button>
+              <button onClick={() => RequestGameStateChange("countdown")}>
+                Start Countdown
+              </button>
+              <button onClick={() => RequestCard()}>Get New Card</button>
+            </div>
           </div>
         );
       case "game":
+        
         return (
-          <div className="bubble-container">
-            <h2>Game in Progress</h2>
-            <LobbyBubble players={players} />
+          <div>
+            <h2>{currentCardData ? currentCardData.player : ""}</h2>
+            <h2>{currentCardData ? currentCardData.card.Text : ""}</h2>
+
           </div>
-        );
+        ) 
     }
   };
 
   return (
     <div className="home-container">
-      <Navbar/>
+      <Navbar />
       {GeneratePage(localGameState)}
       <button onClick={() => handleBecomeHost()}>Become Host</button>
     </div>

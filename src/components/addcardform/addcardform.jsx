@@ -1,4 +1,4 @@
-import { db } from "../../firebase/firebase.jsx";
+import { db } from "../../firebase/firebase.js";
 import { collection, addDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import "./addcardform.css";
