@@ -1,0 +1,8 @@
+.info-box-container {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100vw;
+} 
+.info-box {
+    width: 30%;
+}
