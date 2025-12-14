@@ -18,8 +18,6 @@ function Lobby() {
 
   return (
     <div className="page-content">
-      <Navbar />
-
       <div className="content-container">
         <div className="info-box-container">
           <div className="info-box">

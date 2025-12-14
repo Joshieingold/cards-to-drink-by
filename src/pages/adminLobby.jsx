@@ -5,7 +5,6 @@ import MiniCard from "../components/mini-card/miniCard";
 function AdminLobby() {
   return (
     <div className="page-content">
-      <Navbar />
       <div className="content-container">
         <div className="info-box-container">
           <div className="info-box">
@@ -29,6 +28,12 @@ function AdminLobby() {
                 <li>Player Name goes here</li>
                 <li>Player Name goes here</li>
               </ul>
+            </div>
+          </div>
+          <div className="info-box">
+            <div className="box-title">Controls</div>
+            <div className="box-content">
+              <button>Start Game</button>
             </div>
           </div>
         </div>
