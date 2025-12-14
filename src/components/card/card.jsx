@@ -1,9 +1,9 @@
 import "./card.css"
-function Card() {
+function Card({title, desc}) {
   return (
     <div className="card">
-      <div className="card-title">Title</div>
-      <div className="card-content">This is the content of the card</div>
+      <div className="card-title">{title}</div>
+      <div className="card-content">{desc}</div>
     </div>
   );
 }
