@@ -1,0 +1,8 @@
+.card-section {
+    display: flex;
+    width: 40%;
+    height: 100%;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,26 @@
+
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: white;
+    height: 100%;
+    border: 2px solid black;
+    border-radius: 7px;
+}
+.card-title {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    color: white;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+.card-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+}

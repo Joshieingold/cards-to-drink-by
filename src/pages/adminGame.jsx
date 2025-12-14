@@ -1,7 +1,15 @@
+import Card from "../components/card/card"
+import "./adminGame.css"
 function AdminGame() {
     return (
-        <div>Hello world</div>
+        <div className="page-content">
+            <div className="card-section">
+                <Card/>
+            </div>
+            <div className="player-container">
 
+            </div>
+        </div>
     )
 }
 export default AdminGame

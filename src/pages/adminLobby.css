@@ -24,20 +24,3 @@ height: 60%;
     justify-content: center;
     margin-bottom: 10px;
 }
-.mini-card {
-    display: flex;
-    border: 2px solid black;
-    flex-direction: column;
-    max-width: 200px;
-    border-radius: 7px;
-}
-.mini-card-title {
-    background-color: black;
-    border-top-left-radius: 7px ;
-    border-top-right-radius: 7px ;
-    color: white;
-}
-.mini-card-content {
-    padding: 5px;
-    height: 90%;
-}
