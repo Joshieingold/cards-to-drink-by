@@ -1,15 +1,21 @@
 import './App.css';
 import Navbar from './components/navbar/navbar.jsx';
-import AdminGame from './pages/adminGame.jsx';
+import SelectedPlayer from "./pages/selectedPlayer.jsx"
 
 function App() {
 
   return (
     <>
     <Navbar/>
-    <AdminGame/>
+    <SelectedPlayer/>
     </>
   )
 }
 
 export default App
+
+// Admin Game Looks Good
+// Admin Lobby Looks Good
+// General Player cant look bad
+// Lobby Looks good
+// Now the selected player looks good

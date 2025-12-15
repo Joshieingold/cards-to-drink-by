@@ -1,4 +1,4 @@
-import "./generalPlayer.css"
+import "./pageCss/GeneralPlayer.css"
 function GeneralPlayer() {
     return (
         <div className="page-content">
