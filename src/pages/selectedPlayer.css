@@ -1,0 +1,15 @@
+.card-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+
+}
+.button-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+.button-container button {
+    width: 45%;
+    margin-bottom: 10px ;
+}
