@@ -1,4 +1,5 @@
 import Card from "../components/card/card"
+import PlayerStats from "../components/player-stats/playerStats";
 import "./adminGame.css"
 function AdminGame() {
     return (
@@ -14,7 +15,15 @@ function AdminGame() {
               <div>Most Answers: Edilyn</div>
             </div>
           </div>
-          <div className="player-container"></div>
+          <div className="player-container">
+              <PlayerStats currentDrinks={2} currentTruths={5} name={"Josh"}></PlayerStats>
+              <PlayerStats currentDrinks={2} currentTruths={5} name={"Josh"}></PlayerStats>
+              <PlayerStats currentDrinks={2} currentTruths={5} name={"Josh"}></PlayerStats>
+              <PlayerStats currentDrinks={2} currentTruths={5} name={"Josh"}></PlayerStats>
+              <PlayerStats currentDrinks={2} currentTruths={5} name={"Josh"}></PlayerStats>
+              <PlayerStats currentDrinks={2} currentTruths={5} name={"Josh"}></PlayerStats>
+              <PlayerStats currentDrinks={2} currentTruths={5} name={"Josh"}></PlayerStats>
+          </div>
         </div>
       </div>
     );
