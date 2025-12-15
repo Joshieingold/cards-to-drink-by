@@ -1,6 +1,11 @@
+import "./generalPlayer.css"
 function GeneralPlayer() {
     return (
-        <div></div>
+        <div className="page-content">
+            <div className="small-content">
+                <div>Round 1</div>
+            </div>
+        </div>
 
     )
 }
