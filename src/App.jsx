@@ -1,70 +1,59 @@
-import './App.css';
-import Navbar from './components/navbar/navbar.jsx';
+import "./App.css";
+import Navbar from "./components/navbar/navbar.jsx";
 import SelectedPlayer from "./pages/selectedPlayer.jsx";
 import AdminGame from "./pages/adminGame.jsx";
 import AdminLobby from "./pages/adminLobby.jsx";
-import GeneralPlayer from './pages/generalPlayer.jsx';
+import GeneralPlayer from "./pages/generalPlayer.jsx";
 import Lobby from "./pages/lobby.jsx";
-import { useState } from 'react';
+import { useState } from "react";
 
 function App() {
-  const [user, setUser] = useState("Admin");
-  const [gameState, setGameState] = useState("Game");
+  const [user, setUser] = useState("");
+  const [gameState, setGameState] = useState("Lobby");
   const [selectedUser, setSelectedUser] = useState(false);
   if (gameState == "Lobby") {
     if (user == "Admin") {
       return (
         <>
-        <Navbar/>
-        <AdminLobby/>
-       </>
-      )
-    }
-    else {
-
+          <Navbar />
+          <AdminLobby />
+        </>
+      );
+    } else {
       return (
         <>
-        <Navbar/>
-        <Lobby/>
-       </>
-      )
+          <Navbar />
+          <Lobby />
+        </>
+      );
     }
-  }
-  else {
+  } else {
     if (user == "Admin") {
       return (
         <>
-        <Navbar/>
-        <AdminGame/>
-       </>
-      )
-    }
-    else {
+          <Navbar />
+          <AdminGame />
+        </>
+      );
+    } else {
       if (selectedUser) {
         return (
-        <>
-          <Navbar/>
-          <SelectedPlayer/>
-        </>
-        )
-      }
-      else {
+          <>
+            <Navbar />
+            <SelectedPlayer />
+          </>
+        );
+      } else {
         return (
-
-        <>
-          <Navbar/>
-          <GeneralPlayer/>
-        </>
-        )
+          <>
+            <Navbar />
+            <GeneralPlayer />
+          </>
+        );
       }
     }
   }
 }
 
-export default App
+export default App;
 
-// Admin Game Looks Good
-// Admin Lobby Looks Good
-// General Player cant look bad
-// Lobby Looks good
-// Now the selected player looks good
