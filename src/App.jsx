@@ -91,3 +91,5 @@ useEffect(() => {
 
 export default App;
 
+// npm run dev -- --host
+// node ./index.js
