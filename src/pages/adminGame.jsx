@@ -2,11 +2,10 @@ import Card from "../components/card/card";
 import PlayerStats from "../components/player-stats/playerStats";
 import "./pageCss/adminGame.css";
 
-function AdminGame({ currentCard }) { // ✅ destructured props
+function AdminGame({ currentCard }) {
   if (!currentCard) {
     return <div>Loading card...</div>;
   }
-
   const { id: cardID, title: cardTitle, description: cardDesc, truth_count: truthCount, drink_count: drinkCount } = currentCard;
 
   return (
@@ -29,11 +28,9 @@ function AdminGame({ currentCard }) { // ✅ destructured props
           <PlayerStats currentDrinks={2} currentTruths={5} name={"Edilyn"} />
           <PlayerStats currentDrinks={1} currentTruths={3} name={"Mike"} />
           <PlayerStats currentDrinks={0} currentTruths={4} name={"Anna"} />
-          {/* Map over players dynamically if you want */}
         </div>
       </div>
     </div>
   );
 }
-
 export default AdminGame;
