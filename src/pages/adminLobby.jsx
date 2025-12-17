@@ -1,7 +1,11 @@
 import "./pageCss/general.css";
-import "./pageCss/adminLobby.css"
+import "./pageCss/adminLobby.css";
 import MiniCard from "../components/mini-card/miniCard";
-function AdminLobby({players}) {
+import { socket } from "../components/socket";
+function AdminLobby({ players }) {
+  const startGame = () => {
+      socket.emit("startGame");
+  }
   return (
     <div className="page-content lobby-two">
       <div className="content-container lobby">
@@ -19,26 +23,27 @@ function AdminLobby({players}) {
           <div className="info-box lobby-box">
             <div className="box-title">Lobby</div>
             <div className="box-content">
-                          <ul>
-  {players.map((player) => (
-    <li key={player.id}>{player.name}</li>
-  ))}
-</ul>
+              <ul>
+                {players.map((player) => (
+                  <li key={player.id}>{player.name}</li>
+                ))}
+              </ul>
             </div>
           </div>
           <div className="info-box lobby-box">
             <div className="box-title">Controls</div>
             <div className="box-content">
-              <button>Start Game</button>
+              <button onClick={() => (startGame())}>Start Game</button>
             </div>
           </div>
         </div>
       </div>
       <h3>Cards</h3>
       <div className="card-scroll">
-        <MiniCard title="Title" desc="This is the description"/>
+        <MiniCard title="Title" desc="This is the description" />
       </div>
     </div>
-  );}
+  );
+}
 
 export default AdminLobby;

@@ -14,6 +14,7 @@ function App() {
   const [gameState, setGameState] = useState("Lobby");
   const [selectedUser, setSelectedUser] = useState(false);
   const [currentUsers, setCurrentUsers] = useState([]);
+  const [currentCard, setCurrentCard] = useState("");
 
  useEffect(() => {
   socket.on("connect", () => {
@@ -28,10 +29,13 @@ function App() {
     socket.off("becomeAdmin");
   };
 }, []);
+
+// Helper Functions
 const setName = (name) => {
   setUser(name);
   socket.emit("addUser", name);
 };
+
 useEffect(() => {
   const handleUsersUpdated = (userList) => {
     setCurrentUsers(userList);
@@ -43,6 +47,28 @@ useEffect(() => {
     socket.off("usersUpdated", handleUsersUpdated);
   };
 }, []);
+useEffect(() => {
+  const handleStartGame = () => {
+    setGameState("Game");
+  }
+  socket.on("startGame", handleStartGame);
+  return () => {
+    socket.off("startGame", handleStartGame)
+  };
+}, []);
+useEffect(() => {
+  const handleNewCard = (card) => {
+    console.log(`Card received for user ${socket.id}:`, card);
+    setCurrentCard(card);
+  };
+
+  socket.on("newCard", handleNewCard);
+
+  return () => {
+    socket.off("newCard", handleNewCard);
+  };
+}, []);
+
 
   if (gameState == "Lobby") {
     if (user == "Admin") {
@@ -66,7 +92,7 @@ useEffect(() => {
       return (
         <>
           <Navbar />
-          <AdminGame />
+          <AdminGame currentCard={currentCard}/>
         </>
       );
     } else {
@@ -74,7 +100,7 @@ useEffect(() => {
         return (
           <>
             <Navbar />
-            <SelectedPlayer />
+            <SelectedPlayer currentCard={currentCard}/>
           </>
         );
       } else {

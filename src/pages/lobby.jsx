@@ -44,10 +44,10 @@ function Lobby({ callbackFunction, players }) {
             <div className="box-title">Lobby</div>
             <div className="box-content">
               <ul>
-  {players.map((player) => (
-    <li key={player.id}>{player.name}</li>
-  ))}
-</ul>
+                {players.map((player) => (
+                  <li key={player.id}>{player.name}</li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@ function Lobby({ callbackFunction, players }) {
             <div className="form-title">Add a Card to the Game!</div>
             <div className="box-content">
               <div className="form-text-container">
-                <h2>Category:</h2>
+                <h2>Title:</h2>
                 <input className="text-box" />
               </div>
 
@@ -101,7 +101,7 @@ function Lobby({ callbackFunction, players }) {
 
               <div className="box-content">
                 <div className="form-text-container">
-                  <h2>Category:</h2>
+                  <h2>Title:</h2>
                   <input className="text-box" />
                 </div>
 
