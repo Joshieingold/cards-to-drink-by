@@ -1,7 +1,7 @@
 import "./pageCss/general.css";
 import "./pageCss/adminLobby.css"
 import MiniCard from "../components/mini-card/miniCard";
-function AdminLobby() {
+function AdminLobby({players}) {
   return (
     <div className="page-content lobby-two">
       <div className="content-container lobby">
@@ -11,7 +11,7 @@ function AdminLobby() {
             <div className="box-content">
               <h3>Scan here to join</h3>
               <div className="qr-img-container">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYwP2GpBa2-ABQAXqI3HAE1ed72FpfAv17YA&s" className="qr-img"></img>
+                <img src="src/assets/qr-code.png" className="qr-img"></img>
               </div>
             </div>
           </div>
@@ -19,14 +19,11 @@ function AdminLobby() {
           <div className="info-box lobby-box">
             <div className="box-title">Lobby</div>
             <div className="box-content">
-              <ul>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-              </ul>
+                          <ul>
+  {players.map((player) => (
+    <li key={player.id}>{player.name}</li>
+  ))}
+</ul>
             </div>
           </div>
           <div className="info-box lobby-box">

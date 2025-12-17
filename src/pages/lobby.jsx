@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import "../pages/pageCss/general.css"
+import "../pages/pageCss/general.css";
 
-function Lobby() {
+function Lobby({ callbackFunction, players }) {
   const [isMobile, setIsMobile] = useState(false);
   const [showAddCard, setShowAddCard] = useState(false);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 768px)");
@@ -23,8 +24,19 @@ function Lobby() {
             <div className="box-title">Join</div>
             <div className="box-content">
               <h3>What is your name?</h3>
-              <input className="text-box" />
-              <button>Join</button>
+
+              <input
+                className="text-box"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+
+              <button
+                onClick={() => callbackFunction(username)}
+                disabled={!username.trim()}
+              >
+                Join
+              </button>
             </div>
           </div>
 
@@ -32,13 +44,10 @@ function Lobby() {
             <div className="box-title">Lobby</div>
             <div className="box-content">
               <ul>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-                <li>Player Name goes here</li>
-              </ul>
+  {players.map((player) => (
+    <li key={player.id}>{player.name}</li>
+  ))}
+</ul>
             </div>
           </div>
         </div>
@@ -46,7 +55,6 @@ function Lobby() {
         {!isMobile && (
           <div className="add-card-form">
             <div className="form-title">Add a Card to the Game!</div>
-
             <div className="box-content">
               <div className="form-text-container">
                 <h2>Category:</h2>
