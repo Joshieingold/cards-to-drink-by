@@ -2,33 +2,7 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import mysql from "mysql2";
-
-/* =========================
-   MySQL Pool
-========================= */
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "12345",
-  database: "truth_or_drink",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
-
-const getCard = (callback) => {
-  pool.query(
-    "SELECT * FROM cards ORDER BY RAND() LIMIT 1;",
-    (err, results) => {
-      if (err) {
-        console.error("DB error:", err);
-        callback(err, null);
-        return;
-      }
-      callback(null, results[0]);
-    }
-  );
-};
+import Getcard from "./database.js"
 
 /* =========================
    Express + HTTP
@@ -96,7 +70,7 @@ io.on("connection", (socket) => {
     io.emit("startGame");
 
     // Draw a card
-    getCard((err, card) => {
+    GetCard((err, card) => {
       if (err) return;
       io.emit("newCard", card);
       console.log("Card sent:", card);
