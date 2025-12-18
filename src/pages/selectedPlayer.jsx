@@ -1,8 +1,15 @@
 import "./pageCss/selectedPlayer.css";
 import "./pageCss/general.css";
-function SelectedPlayer({currentCard}) {
+import { socket } from "../components/socket";
 
-  const { id: cardID, title: cardTitle, description: cardDesc, truth_count: truthCount, drink_count: drinkCount } = currentCard;
+function SelectedPlayer({ currentCard, user }) {
+
+  const { id: cardID, title: cardTitle, description: cardDesc } = currentCard;
+
+  const SendNextRound = (choice) => {
+    socket.emit("nextRound", { player: user, choice, cardID });
+  };
+
   return (
     <div className="page-content">
       <div className="card-container">
@@ -10,12 +17,13 @@ function SelectedPlayer({currentCard}) {
           <div className="card-title">{cardTitle}</div>
           <div className="card-content">{cardDesc}</div>
           <div className="button-container">
-            <button>Drink</button>
-            <button>Truth</button>
+            <button onClick={() => SendNextRound("drink")}>Drink</button>
+            <button onClick={() => SendNextRound("truth")}>Truth</button>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
 export default SelectedPlayer;

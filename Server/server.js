@@ -1,7 +1,7 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import GetCard from "./database.js";
+import { GetCard, IncrementCardCount } from "./database.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -19,45 +19,50 @@ const io = new Server(server, {
   },
 });
 
-// Helper Functions
+/* ======================
+   Helper Functions
+====================== */
+
+// Get a random player name
 const getRandomUser = () => {
-  // Selects a random User
   if (players.length === 0) return null;
-
   const randomIndex = Math.floor(Math.random() * players.length);
-  const chosenPlayer = players[randomIndex];
-
-  console.log("Random user chosen:", chosenPlayer);
-  return chosenPlayer.name;
+  return players[randomIndex].name;
 };
 
+// Initialize stats for all players
 const InitializePlayerMap = () => {
   playersMap = {};
   players.forEach((player) => {
-    playersMap[player.name] = {
-      truth: 0,
-      drink: 0,
-    };
+    playersMap[player.name] = { truth: 0, drink: 0 };
   });
 };
 
+// Safely update player stats
 const HandleMapUpdate = ({ player, choice }) => {
-  if (choice === "truth") {
-    playersMap[player].truth++;
-  } else {
-    playersMap[player].drink++;
+  if (!player || !["truth", "drink"].includes(choice)) return;
+
+  if (!playersMap[player]) {
+    // Initialize if missing
+    playersMap[player] = { truth: 0, drink: 0 };
   }
+
+  playersMap[player][choice]++;
 };
 
-// Final Functions
+/* ======================
+   Game Functions
+====================== */
 
-const SendNewRoundPackage = ({ player, choice } = {}) => { // Sends the data for the new round
+// Send a new round package to all clients
+const SendNewRoundPackage = async ({ player, choice } = {}) => {
   roundNumber++;
   if (player && choice) {
     HandleMapUpdate({ player, choice });
   }
-  GetCard((err, card) => {
-    if (err) return;
+
+  try {
+    const card = await GetCard();
     const dataPack = {
       round: roundNumber,
       playerStats: playersMap,
@@ -65,48 +70,69 @@ const SendNewRoundPackage = ({ player, choice } = {}) => { // Sends the data for
       chosenPlayer: getRandomUser(),
     };
     io.emit("NewRound", dataPack);
-  });
+  } catch (err) {
+    console.log("Error getting card:", err);
+  }
 };
 
-const SendStartGamePackage = () => { // Prepares the server and sends the data to start the round
+// Start the game
+const SendStartGamePackage = () => {
   if (players.length === 0) return;
   roundNumber = 0;
   InitializePlayerMap();
   SendNewRoundPackage();
 };
 
+/* ======================
+   Socket.IO Connections
+====================== */
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  // Finds Admin for the game
+  // Assign admin if none exists
   if (!hasAdmin) {
     socket.emit("becomeAdmin");
     hasAdmin = true;
     currentAdmin = socket.id;
   }
 
-  // Adding User
+  // Add user to lobby
   socket.on("addUser", (name) => {
     if (players.some((p) => p.id === socket.id)) return;
     players.push({ id: socket.id, name });
     io.emit("usersUpdated", players);
   });
 
-  // When we recieve a start game request
+  // Start game request
   socket.on("startGame", () => {
     SendStartGamePackage();
   });
 
-  // when we recieve a next round request
-  socket.on("nextRound", ({ player, choice }) => {
-    SendNewRoundPackage({ player, choice });
+  // Next round request
+  socket.on("nextRound", async ({ player, choice, cardID }) => {
+    try {
+      // Update stats
+      HandleMapUpdate({ player, choice });
+
+      // Update card in database
+      if (cardID) {
+        await IncrementCardCount({ cardID, choice });
+      }
+
+      // Send new round
+      SendNewRoundPackage({ player, choice });
+    } catch (err) {
+      console.log("Error in nextRound:", err);
+    }
   });
 
-  // Handles Disconnections
+  // Handle disconnect
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
     players = players.filter((p) => p.id !== socket.id);
     io.emit("usersUpdated", players);
+
+    // Reassign admin if necessary
     if (socket.id === currentAdmin) {
       hasAdmin = false;
       currentAdmin = "";
@@ -121,7 +147,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// Server //
+/* ======================
+   Start Server
+====================== */
 server.listen(3000, "0.0.0.0", () => {
   console.log("Socket server running on port 3000");
 });

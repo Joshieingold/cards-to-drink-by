@@ -12,12 +12,14 @@ function App() {
   const [user, setUser] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [gameState, setGameState] = useState("Lobby");
-  const [selectedUser, setSelectedUser] = useState("");
+
   const [currentUsers, setCurrentUsers] = useState([]);
-  const [currentCard, setCurrentCard] = useState("");
+  const [currentCard, setCurrentCard] = useState(null);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [playerStats, setPlayerStats] = useState({});
 
   /* ======================
-     Socket Setup
+     Socket Core Setup
   ====================== */
   useEffect(() => {
     socket.on("connect", () => {
@@ -25,8 +27,8 @@ function App() {
     });
 
     socket.on("becomeAdmin", () => {
-      setIsAdmin(true);
       console.log("You are admin");
+      setIsAdmin(true);
     });
 
     return () => {
@@ -36,7 +38,7 @@ function App() {
   }, []);
 
   /* ======================
-     Helper
+     Join Lobby
   ====================== */
   const setName = (name) => {
     setUser(name);
@@ -47,8 +49,8 @@ function App() {
      Users Updated
   ====================== */
   useEffect(() => {
-    const handleUsersUpdated = (userList) => {
-      setCurrentUsers(userList);
+    const handleUsersUpdated = (users) => {
+      setCurrentUsers(users);
     };
 
     socket.on("usersUpdated", handleUsersUpdated);
@@ -56,41 +58,20 @@ function App() {
   }, []);
 
   /* ======================
-     Start Game
+     NEW ROUND (single source of truth)
   ====================== */
   useEffect(() => {
-    const handleStartGame = () => {
+    const handleNewRound = (dataPack) => {
+      console.log("New round package:", dataPack);
+
       setGameState("Game");
+      setCurrentCard(dataPack.newCard);
+      setSelectedUser(dataPack.chosenPlayer);
+      setPlayerStats(dataPack.playerStats);
     };
 
-    socket.on("startGame", handleStartGame);
-    return () => socket.off("startGame", handleStartGame);
-  }, []);
-
-  /* ======================
-     New Card
-  ====================== */
-  useEffect(() => {
-    const handleNewCard = (card) => {
-      console.log("Card received:", card);
-      setCurrentCard(card);
-    };
-
-    socket.on("newCard", handleNewCard);
-    return () => socket.off("newCard", handleNewCard);
-  }, []);
-
-  /* ======================
-     Selected Player
-  ====================== */
-  useEffect(() => {
-    const handleSelectedPlayer = (player) => {
-      console.log("Chosen player:", player);
-      setSelectedUser(player?.name || "");
-    };
-
-    socket.on("selectedPlayer", handleSelectedPlayer);
-    return () => socket.off("selectedPlayer", handleSelectedPlayer);
+    socket.on("NewRound", handleNewRound);
+    return () => socket.off("NewRound", handleNewRound);
   }, []);
 
   /* ======================
@@ -104,14 +85,14 @@ function App() {
           <AdminLobby players={currentUsers} />
         </>
       );
-    } else {
-      return (
-        <>
-          <Navbar />
-          <Lobby callbackFunction={setName} players={currentUsers} />
-        </>
-      );
     }
+
+    return (
+      <>
+        <Navbar />
+        <Lobby callbackFunction={setName} players={currentUsers} />
+      </>
+    );
   }
 
   // GAME STATE
@@ -119,7 +100,11 @@ function App() {
     return (
       <>
         <Navbar />
-        <AdminGame currentCard={currentCard} />
+        <AdminGame
+          currentCard={currentCard}
+          playerStats={playerStats}
+          selectedUser={selectedUser}
+        />
       </>
     );
   }
@@ -128,7 +113,7 @@ function App() {
     return (
       <>
         <Navbar />
-        <SelectedPlayer currentCard={currentCard} />
+        <SelectedPlayer currentCard={currentCard, user} />
       </>
     );
   }
