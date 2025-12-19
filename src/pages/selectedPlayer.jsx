@@ -8,6 +8,8 @@ function SelectedPlayer({ currentCard, user }) {
 
   const SendNextRound = (choice) => {
     socket.emit("nextRound", { player: user, choice, cardID });
+    console.log(choice);
+    console.log(user);
   };
 
   return (

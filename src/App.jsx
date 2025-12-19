@@ -17,37 +17,45 @@ function App() {
   const [currentCard, setCurrentCard] = useState(null);
   const [selectedUser, setSelectedUser] = useState("");
   const [playerStats, setPlayerStats] = useState({});
+  const [round, setRound] = useState(0); // ✅ FIX: round state
 
   /* ======================
-     Socket Core Setup
+     Socket Setup
   ====================== */
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected:", socket.id);
-    });
 
-    socket.on("becomeAdmin", () => {
+  useEffect(() => {
+    const handleConnect = () => {
+      console.log("Connected:", socket.id);
+    };
+
+    const handleBecomeAdmin = () => {
       console.log("You are admin");
       setIsAdmin(true);
-    });
+    };
+
+    socket.on("connect", handleConnect);
+    socket.on("becomeAdmin", handleBecomeAdmin);
 
     return () => {
-      socket.off("connect");
-      socket.off("becomeAdmin");
+      socket.off("connect", handleConnect);
+      socket.off("becomeAdmin", handleBecomeAdmin);
     };
   }, []);
 
   /* ======================
-     Join Lobby
+     User Join
   ====================== */
+
   const setName = (name) => {
+    if (!name) return;
     setUser(name);
     socket.emit("addUser", name);
   };
 
   /* ======================
-     Users Updated
+     Lobby Updates
   ====================== */
+
   useEffect(() => {
     const handleUsersUpdated = (users) => {
       setCurrentUsers(users);
@@ -58,8 +66,9 @@ function App() {
   }, []);
 
   /* ======================
-     NEW ROUND (single source of truth)
+     Game Updates
   ====================== */
+
   useEffect(() => {
     const handleNewRound = (dataPack) => {
       console.log("New round package:", dataPack);
@@ -68,6 +77,7 @@ function App() {
       setCurrentCard(dataPack.newCard);
       setSelectedUser(dataPack.chosenPlayer);
       setPlayerStats(dataPack.playerStats);
+      setRound(dataPack.round); // ✅ FIX: round synced
     };
 
     socket.on("NewRound", handleNewRound);
@@ -75,8 +85,10 @@ function App() {
   }, []);
 
   /* ======================
-     Rendering
+     Render Logic
   ====================== */
+
+  // LOBBY
   if (gameState === "Lobby") {
     if (isAdmin) {
       return (
@@ -95,7 +107,7 @@ function App() {
     );
   }
 
-  // GAME STATE
+  // GAME — ADMIN
   if (isAdmin) {
     return (
       <>
@@ -104,20 +116,24 @@ function App() {
           currentCard={currentCard}
           playerStats={playerStats}
           selectedUser={selectedUser}
+          round={round} // ✅ FIX
+          chosenUser={selectedUser}
         />
       </>
     );
   }
 
+  // GAME — SELECTED PLAYER
   if (selectedUser === user) {
     return (
       <>
         <Navbar />
-        <SelectedPlayer currentCard={currentCard, user} />
+        <SelectedPlayer currentCard={currentCard} user={user} />
       </>
     );
   }
 
+  // GAME — GENERAL PLAYER
   return (
     <>
       <Navbar />
