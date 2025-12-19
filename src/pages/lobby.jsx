@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
+import { socket } from "../components/socket"; // make sure this path is correct
 import "../pages/pageCss/general.css";
 
 function Lobby({ callbackFunction, players }) {
   const [isMobile, setIsMobile] = useState(false);
   const [showAddCard, setShowAddCard] = useState(false);
   const [username, setUsername] = useState("");
+
+  // Card form state
+  const [cardTitle, setCardTitle] = useState("");
+  const [cardQuestion, setCardQuestion] = useState("");
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 768px)");
@@ -15,6 +20,22 @@ function Lobby({ callbackFunction, players }) {
 
     return () => media.removeEventListener("change", listener);
   }, []);
+
+  // ---- SEND CARD TO SERVER ----
+  const submitCard = () => {
+    if (!cardTitle.trim() || !cardQuestion.trim()) return;
+
+    socket.emit("createCardRequest", {
+      title: cardTitle,
+      description: cardQuestion,
+      creator: username
+    });
+
+    // reset form
+    setCardTitle("");
+    setCardQuestion("");
+    setShowAddCard(false);
+  };
 
   return (
     <div className="page-content">
@@ -52,25 +73,35 @@ function Lobby({ callbackFunction, players }) {
           </div>
         </div>
 
+        {/* ----- DESKTOP FORM ----- */}
         {!isMobile && (
           <div className="add-card-form">
             <div className="form-title">Add a Card to the Game!</div>
             <div className="box-content">
               <div className="form-text-container">
                 <h2>Title:</h2>
-                <input className="text-box" />
+                <input
+                  className="text-box"
+                  value={cardTitle}
+                  onChange={(e) => setCardTitle(e.target.value)}
+                />
               </div>
 
               <div className="form-text-container">
                 <h2>Question:</h2>
-                <textarea className="text-box area"></textarea>
+                <textarea
+                  className="text-box area"
+                  value={cardQuestion}
+                  onChange={(e) => setCardQuestion(e.target.value)}
+                />
               </div>
 
-              <button>Submit</button>
+              <button onClick={submitCard}>Submit</button>
             </div>
           </div>
         )}
 
+        {/* ----- MOBILE BUTTON ----- */}
         {isMobile && (
           <button
             className="add-card-toggle"
@@ -80,6 +111,7 @@ function Lobby({ callbackFunction, players }) {
           </button>
         )}
 
+        {/* ----- MOBILE MODAL ----- */}
         {isMobile && showAddCard && (
           <div
             className="add-card-popover"
@@ -102,15 +134,23 @@ function Lobby({ callbackFunction, players }) {
               <div className="box-content">
                 <div className="form-text-container">
                   <h2>Title:</h2>
-                  <input className="text-box" />
+                  <input
+                    className="text-box"
+                    value={cardTitle}
+                    onChange={(e) => setCardTitle(e.target.value)}
+                  />
                 </div>
 
                 <div className="form-text-container">
                   <h2>Question:</h2>
-                  <textarea className="text-box area"></textarea>
+                  <textarea
+                    className="text-box area"
+                    value={cardQuestion}
+                    onChange={(e) => setCardQuestion(e.target.value)}
+                  />
                 </div>
 
-                <button>Submit</button>
+                <button onClick={submitCard}>Submit</button>
               </div>
             </div>
           </div>

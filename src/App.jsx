@@ -137,7 +137,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <GeneralPlayer />
+      <GeneralPlayer round={round}/>
     </>
   );
 }

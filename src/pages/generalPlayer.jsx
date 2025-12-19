@@ -1,9 +1,9 @@
 import "./pageCss/GeneralPlayer.css"
-function GeneralPlayer() {
+function GeneralPlayer(round) {
     return (
         <div className="page-content">
             <div className="small-content">
-                <div>Round 1</div>
+                <div>Round {round}</div>
             </div>
         </div>
 

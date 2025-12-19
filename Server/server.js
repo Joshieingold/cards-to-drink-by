@@ -1,7 +1,7 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import { GetCard } from "./database.js";
+import { CreateCard, GetCard } from "./database.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -113,7 +113,11 @@ io.on("connection", (socket) => {
 
     io.emit("usersUpdated", players);
   });
+socket.on("createCardRequest", ({ title, description, creator }) => {
+  console.log("New card request:", title, description, creator);
 
+  CreateCard({title, description, creator});
+});
   // Start game
   socket.on("startGame", () => {
     if (socket.id !== currentAdmin) return;

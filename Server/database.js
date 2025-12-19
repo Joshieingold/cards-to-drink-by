@@ -54,3 +54,18 @@ export const IncrementCardCount = ({ cardID, choice }) => {
     });
   });
 };
+
+export const CreateCard = ({title, description, creator}) => {
+
+  pool.query(
+    "INSERT INTO cards (title, description, creator) VALUES (?, ?, ?)",
+    [title, description, creator],
+    (err) => {
+      if (err) {
+        console.error("Failed to insert card:", err);
+        return;
+      }
+      console.log("Card added successfully");
+    }
+  );
+}
