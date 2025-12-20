@@ -1,6 +1,6 @@
 import Card from "../components/card/card"
 import PlayerStats from "../components/player-stats/playerStats";
-import "./adminGame.css"
+import "./pageCss/adminGame.css"
 function AdminGame() {
     return (
       <div className="page-content">

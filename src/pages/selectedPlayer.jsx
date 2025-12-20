@@ -1,4 +1,5 @@
-import "./selectedPlayer.css";
+import "./pageCss/selectedPlayer.css";
+import "./pageCss/general.css";
 function SelectedPlayer() {
   return (
     <div className="page-content">

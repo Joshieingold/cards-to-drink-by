@@ -1,6 +1,5 @@
-import Navbar from "../components/navbar/navbar";
-import "./general.css";
-import "./adminLobby.css";
+import "./pageCss/general.css";
+import "./pageCss/adminLobby.css"
 import MiniCard from "../components/mini-card/miniCard";
 function AdminLobby() {
   return (

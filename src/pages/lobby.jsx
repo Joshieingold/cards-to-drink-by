@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/navbar/navbar";
-import "./general.css";
+import "../pages/pageCss/general.css"
 
 function Lobby() {
   const [isMobile, setIsMobile] = useState(false);
@@ -44,7 +43,6 @@ function Lobby() {
           </div>
         </div>
 
-        {/* Desktop form */}
         {!isMobile && (
           <div className="add-card-form">
             <div className="form-title">Add a Card to the Game!</div>
@@ -65,7 +63,6 @@ function Lobby() {
           </div>
         )}
 
-        {/* Mobile toggle button */}
         {isMobile && (
           <button
             className="add-card-toggle"
@@ -75,7 +72,6 @@ function Lobby() {
           </button>
         )}
 
-        {/* Mobile popover */}
         {isMobile && showAddCard && (
           <div
             className="add-card-popover"
