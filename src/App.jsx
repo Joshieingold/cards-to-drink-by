@@ -8,8 +8,7 @@ import Lobby from "./pages/lobby.jsx";
 import { useState, useEffect } from "react";
 import { socket } from "./components/socket.js";
 
-function App() {
-  // Variables
+function App() { // Variables
   const [user, setUser] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [gameState, setGameState] = useState("Lobby");
