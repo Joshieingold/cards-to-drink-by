@@ -1,4 +1,5 @@
 import "./pageCss/GeneralPlayer.css"
+
 function GeneralPlayer(round) {
     return (
         <div className="page-content">

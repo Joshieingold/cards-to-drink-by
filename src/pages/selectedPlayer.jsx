@@ -3,14 +3,8 @@ import "./pageCss/general.css";
 import { socket } from "../components/socket";
 
 function SelectedPlayer({ currentCard, user }) {
-
   const { id: cardID, title: cardTitle, description: cardDesc } = currentCard;
-
-  const SendNextRound = (choice) => {
-    socket.emit("nextRound", { player: user, choice, cardID });
-    console.log(choice);
-    console.log(user);
-  };
+  const SendNextRound = (choice) => { socket.emit("nextRound", { player: user, choice, cardID }); console.log(choice); console.log(user);};
 
   return (
     <div className="page-content">
