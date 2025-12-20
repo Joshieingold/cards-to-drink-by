@@ -57,6 +57,7 @@ function App() { // Variables
     return () => socket.off("NewRound", handleNewRound);
   }, []);
 
+
   const setName = (name) => { // Allows the button to set name of the user.
     if (!name) return;
     setUser(name);
