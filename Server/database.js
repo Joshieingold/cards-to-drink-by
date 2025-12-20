@@ -69,3 +69,10 @@ export const CreateCard = ({title, description, creator}) => {
     }
   );
 }
+export const GetFiveCards = async () => {
+  const promisePool = pool.promise();
+  const [rows] = await promisePool.query(
+    "SELECT id, title, description FROM cards ORDER BY RAND() LIMIT 5"
+  );
+  return rows;
+};

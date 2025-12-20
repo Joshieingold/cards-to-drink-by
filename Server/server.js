@@ -1,7 +1,7 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import { CreateCard, GetCard } from "./database.js";
+import { CreateCard, GetCard, GetFiveCards } from "./database.js";
 
 // Variables
 const app = express();
@@ -9,7 +9,6 @@ const server = http.createServer(app);
 let hasAdmin = false;
 let currentAdmin = "";
 let players = [];
-let gameState = "Lobby";
 let roundNumber = 0;
 let playersMap = {};
 const io = new Server(server, { cors: { origin: "http://192.168.2.64:5173", methods: ["GET", "POST"], }});
@@ -81,6 +80,24 @@ io.on("connection", (socket) => { // Handles recieving a connection from a user 
     HandleMapUpdate({ player, choice });
     SendNewRoundPackage();
   });
+
+  socket.on("requestFiveCards", async () => {
+  try {
+    const cards = await GetFiveCards();
+
+    // Normalize field names for frontend
+    const formattedCards = cards.map(card => ({
+      id: card.id,
+      title: card.title,
+      desc: card.description,
+    }));
+
+    socket.emit("fiveCards", formattedCards);
+  } catch (err) {
+    console.error("Error fetching five cards:", err);
+    socket.emit("fiveCards", []);
+  }
+});
 
 
   socket.on("disconnect", () => { // Handles disconnection from the game.
