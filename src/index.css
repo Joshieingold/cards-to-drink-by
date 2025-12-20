@@ -11,8 +11,14 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
+  background-image: url(./assets/background.png);
+  --christmas-dark-green: #0A7533;
+  --christmas-dark-green-transparent: #0a7533c5;
+  --christmas-light-green: #0CD04A;
+  --christmas-dark-red: #A92921;
+  --christmas-light-red: #FF3A2F;
 
+}
 a {
   font-weight: 500;
   text-decoration: inherit;
@@ -25,6 +31,7 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
+  color: white;
 }
 
 h1 {
@@ -37,14 +44,15 @@ button {
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 900;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--christmas-light-green);
+  color: rgb(255, 255, 255);
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--christmas-light-red)
 }
 button:focus,
 button:focus-visible {

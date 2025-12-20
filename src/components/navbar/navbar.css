@@ -2,7 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: black;
+    background-color: var(--christmas-light-red);
+    box-shadow: 5px 5px 40px black;
     color: white;
     position: sticky;
     top: 0;

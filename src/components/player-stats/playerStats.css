@@ -1,17 +1,18 @@
 .player-card {
     border-radius: 7px;
     min-width: 150px;
-    border: 1px solid black;
     height: 80px;
+    backdrop-filter: blur(4px);
     align-items: center;
     display: flex;
     flex-direction: column;
+    background-color: var(--christmas-dark-green-transparent);
     gap: 10px;
-    background-color: white;
+    box-shadow: 5px 5px 20px black;
 }
 
 .player-card-title {
-    background-color: black;
+    background-color: var(--christmas-dark-red);
     color: white;
     width: 100%;
     border-top-left-radius: 7px;
@@ -24,7 +25,6 @@
     display: flex;
     height: 24px;
     width: 90%;
-
     border-radius: 8px;
     overflow: hidden;
 }
@@ -36,16 +36,15 @@
     font-size: 12px;
     color: white;
     transition: width 0.3s ease;
-    border: 1px solid black
 }
 
 .drinks {
-    background-color: black;
+    background-color: var(--christmas-light-red);
 }
 
 .truths {
-    background-color: white;
-    color: black;
+    background-color: var(--christmas-light-green);
+    color: white;
     border-top-right-radius: 7px ;
     border-bottom-right-radius: 7px ;
 }

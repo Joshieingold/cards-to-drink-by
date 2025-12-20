@@ -2,7 +2,7 @@ import "./navbar.css";
 function Navbar() {
     return (
         <div className="nav-body">
-            <h2>Cards To Drink By</h2>
+            <h2>Truth or Drink</h2>
         </div>
     )
 } 

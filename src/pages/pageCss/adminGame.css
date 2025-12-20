@@ -30,7 +30,9 @@
     height: 40%;
     width: 100%;
     flex-direction: column;
-    border: 2px solid black;
+    background-color: var(--christmas-dark-green-transparent);
+    backdrop-filter: blur(4px);
+    box-shadow: 10px 10px 40px black;
     border-radius: 7px;
 }
 .bubble-content {
