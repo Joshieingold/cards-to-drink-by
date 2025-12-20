@@ -17,11 +17,7 @@ function App() {
   const [currentCard, setCurrentCard] = useState(null);
   const [selectedUser, setSelectedUser] = useState("");
   const [playerStats, setPlayerStats] = useState({});
-  const [round, setRound] = useState(0); // ✅ FIX: round state
-
-  /* ======================
-     Socket Setup
-  ====================== */
+  const [round, setRound] = useState(0); 
 
   useEffect(() => {
     const handleConnect = () => {
@@ -42,19 +38,12 @@ function App() {
     };
   }, []);
 
-  /* ======================
-     User Join
-  ====================== */
 
   const setName = (name) => {
     if (!name) return;
     setUser(name);
     socket.emit("addUser", name);
   };
-
-  /* ======================
-     Lobby Updates
-  ====================== */
 
   useEffect(() => {
     const handleUsersUpdated = (users) => {
@@ -65,9 +54,6 @@ function App() {
     return () => socket.off("usersUpdated", handleUsersUpdated);
   }, []);
 
-  /* ======================
-     Game Updates
-  ====================== */
 
   useEffect(() => {
     const handleNewRound = (dataPack) => {
@@ -84,11 +70,6 @@ function App() {
     return () => socket.off("NewRound", handleNewRound);
   }, []);
 
-  /* ======================
-     Render Logic
-  ====================== */
-
-  // LOBBY
   if (gameState === "Lobby") {
     if (isAdmin) {
       return (
@@ -107,7 +88,6 @@ function App() {
     );
   }
 
-  // GAME — ADMIN
   if (isAdmin) {
     return (
       <>
@@ -116,14 +96,13 @@ function App() {
           currentCard={currentCard}
           playerStats={playerStats}
           selectedUser={selectedUser}
-          round={round} // ✅ FIX
+          round={round} 
           chosenUser={selectedUser}
         />
       </>
     );
   }
 
-  // GAME — SELECTED PLAYER
   if (selectedUser === user) {
     return (
       <>
@@ -133,7 +112,6 @@ function App() {
     );
   }
 
-  // GAME — GENERAL PLAYER
   return (
     <>
       <Navbar />
