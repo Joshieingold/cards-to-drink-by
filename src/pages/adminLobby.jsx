@@ -3,10 +3,10 @@ import "./pageCss/adminLobby.css"
 import MiniCard from "../components/mini-card/miniCard";
 function AdminLobby() {
   return (
-    <div className="page-content">
-      <div className="content-container">
-        <div className="info-box-container">
-          <div className="info-box">
+    <div className="page-content lobby-two">
+      <div className="content-container lobby">
+        <div className="box-container">
+          <div className="info-box lobby-box">
             <div className="box-title">Join</div>
             <div className="box-content">
               <h3>Scan here to join</h3>
@@ -16,7 +16,7 @@ function AdminLobby() {
             </div>
           </div>
 
-          <div className="info-box">
+          <div className="info-box lobby-box">
             <div className="box-title">Lobby</div>
             <div className="box-content">
               <ul>
@@ -29,7 +29,7 @@ function AdminLobby() {
               </ul>
             </div>
           </div>
-          <div className="info-box">
+          <div className="info-box lobby-box">
             <div className="box-title">Controls</div>
             <div className="box-content">
               <button>Start Game</button>
