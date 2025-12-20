@@ -81,7 +81,7 @@ io.on("connection", (socket) => { // Handles recieving a connection from a user 
     SendNewRoundPackage();
   });
 
-  socket.on("requestFiveCards", async () => {
+  socket.on("requestFiveCards", async () => { // Sends 5 cards to the admin upon request.
   try {
     const cards = await GetFiveCards();
 
