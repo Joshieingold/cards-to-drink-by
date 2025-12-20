@@ -48,7 +48,6 @@ const SendNewRoundPackage = async () => { // Sends data to all clients about how
 const SendStartGamePackage = () => { // Pings the clients to enter the game mode.
   if (players.length === 0) return;
   roundNumber = 0;
-  gameState = "Game";
   InitializePlayerMap();
   SendNewRoundPackage();
 };
